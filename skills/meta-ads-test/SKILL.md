@@ -9,9 +9,9 @@ Pro jednu testovanou variantu použij **1 kampaň → 1 sada reklam → 1 reklam
 
 ## Příprava
 
-1. Ověř název a ID reklamního účtu, měnu a časové pásmo. Při chybějícím připojení použij [meta-ads-setup](../meta-ads-setup/SKILL.md). Použij ověřené nástroje Meta Ads MCP nebo `cli-json` ze stejného skillu. Skripty spouštěj přes `meta-ads.sh python` podle [postupu pro daný systém](../meta-ads-setup/references/platforms.md).
+1. Ověř název a ID reklamního účtu, měnu a časové pásmo. Při chybějícím připojení použij [meta-ads-setup](../meta-ads-setup/SKILL.md). Pro čtení, tvorbu a případnou aktivaci použij přednostně oficiální Meta Ads CLI přes `cli-json`. Meta Ads MCP použij, pokud CLI daný krok nepodporuje nebo není dostupné. Skripty spouštěj přes `meta-ads.sh python` podle [postupu pro daný systém](../meta-ads-setup/references/platforms.md).
 2. Z briefu, dostupných podkladů a případné referenční kampaně zjisti cíl, cílovou URL, identitu FB stránky či IG účtu, text a soubor nebo ID média, publikum, rozpočet, měnu a dobu běhu. Pro konverzní cíl ověř také odpovídající datovou sadu a událost. Dotaž se pouze na chybějící rozhodnutí. Při kopírování použij jen nastavení, která odpovídají zadání testu.
-3. Urči rozpočet podle pravidel níže. Před vytvořením nebo duplikováním reklamy použij [meta-ads-utm](../meta-ads-utm/SKILL.md) na cílový odkaz a případnou zděděnou kreativu. Hodnotu `url_tags` připrav předem. Chybějící nebo neověřitelné UTM blokuje uložení reklamy k doručování i její spuštění.
+3. Urči rozpočet podle pravidel níže. Před vytvořením nebo duplikováním reklamy použij [meta-ads-utm](../meta-ads-utm/SKILL.md) na cílový odkaz a případnou zděděnou kreativu. Hodnotu `url_tags` připrav předem a při tvorbě kreativy tohoto testu ji ulož přednostně přes CLI. Chybějící nebo neověřitelné UTM blokuje uložení reklamy k doručování i její spuštění.
 
 ## Rozpočet
 
