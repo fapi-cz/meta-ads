@@ -5,8 +5,8 @@ import re
 import subprocess
 import sys
 import tempfile
-import warnings
-from getpass import GetPassWarning, getpass
+import termios
+import tty
 from pathlib import Path
 from urllib.parse import quote, quote_plus
 
@@ -71,27 +71,50 @@ def read_token(channel, credentials):
     return token
 
 
-def prompt_token(channel, account):
-    if sys.platform == "darwin":
-        print(f"Zadejte token {channel.upper()} do skryté výzvy Klíčenky.", flush=True)
-        try:
-            subprocess.run(
-                [KEYCHAIN, "add-generic-password", "-U", *keychain_item(channel, account), "-w"],
-                check=True,
-            )
-        except (OSError, subprocess.CalledProcessError):
-            sys.exit("Token se nepodařilo uložit do Klíčenky.")
-        read_token(channel, {"account": account, channel: KEYCHAIN_REFERENCE})
-        return KEYCHAIN_REFERENCE
+def hidden_input(prompt):
+    descriptor = sys.stdin.fileno()
+    original_mode = termios.tcgetattr(descriptor)
+    # Canonical terminal input also limits long pasted lines on macOS.
+    tty.setcbreak(descriptor)
+    try:
+        print(prompt, end="", flush=True)
+        value = bytearray()
+        while character := os.read(descriptor, 1):
+            if character in (b"\r", b"\n"):
+                return value.decode("ascii").strip()
+            if character in (b"\b", b"\x7f"):
+                del value[-1:]
+            elif character == b"\x04":
+                break
+            else:
+                value.extend(character)
+        raise EOFError
+    finally:
+        termios.tcsetattr(descriptor, termios.TCSAFLUSH, original_mode)
+        print(flush=True)
 
-    with warnings.catch_warnings():
-        warnings.simplefilter("error", GetPassWarning)
-        try:
-            token = getpass(f"Token {channel.upper()}: ").strip()
-        except GetPassWarning:
-            sys.exit("Terminál nepodporuje skryté zadání tokenu.")
+
+def prompt_token(channel, account):
+    try:
+        token = hidden_input(f"Vložte celý token {channel.upper()} a stiskněte Enter: ")
+    except (OSError, termios.error):
+        sys.exit("Terminál nepodporuje skryté zadání tokenu.")
+    except UnicodeDecodeError:
+        sys.exit("Zadaný token nemá platný formát.")
     if not TOKEN_PATTERN.fullmatch(token):
         sys.exit("Zadaný token nemá platný formát.")
+
+    if sys.platform == "darwin":
+        from macos_keychain import store_token
+
+        try:
+            store_token(f"fapi-meta-ads-{channel}", account, token)
+        except OSError as error:
+            status = f" ({error.errno})" if error.errno is not None else ""
+            sys.exit(f"Token se nepodařilo uložit do Klíčenky{status}. Odemkněte ji a zopakujte connect-{channel}.")
+        if read_token(channel, {"account": account, channel: KEYCHAIN_REFERENCE}) != token:
+            sys.exit(f"Klíčenka nevrátila celý token. Zopakujte connect-{channel}.")
+        return KEYCHAIN_REFERENCE
     return token
 
 
@@ -114,7 +137,9 @@ def connect(channel):
 
     try:
         if channel == "mcp":
-            account = input("ID reklamního účtu: ").strip().removeprefix("act_")
+            existing = load_credentials(required=False).get("account", "")
+            prompt = f"ID reklamního účtu [{existing}]: " if existing else "ID reklamního účtu: "
+            account = (input(prompt).strip() or existing).removeprefix("act_")
             if not re.fullmatch(r"[0-9]{1,32}", account):
                 sys.exit("Zkontrolujte ID reklamního účtu.")
             account = f"act_{account}"
@@ -198,7 +223,14 @@ if __name__ == "__main__":
         connect(action.split("-", 1)[1])
     elif action == "status":
         credentials = load_credentials(required=False)
-        print(json.dumps({"account": credentials.get("account"), "mcp_token": bool(credentials.get("mcp")), "separate_cli_token": bool(credentials.get("cli"))}))
+        binaries = STATE_DIR / "venv/bin"
+        print(json.dumps({
+            "account": credentials.get("account"),
+            "mcp_token": bool(credentials.get("mcp")),
+            "separate_cli_token": bool(credentials.get("cli")),
+            "cli_installed": os.access(binaries / "meta", os.X_OK),
+            "mcp_installed": os.access(binaries / "mcp-proxy", os.X_OK),
+        }))
     elif action in {"check-mcp", "check-cli"}:
         from verify_connection import verify_connection
 

@@ -1,7 +1,7 @@
 {
   "name": "fapi-meta-ads",
   "displayName": "Meta Ads",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Připojení Meta Ads CLI a MCP, testovací reklamy s rozpočtem, povinné UTM a vyhodnocení kampaní.",
   "author": {
     "name": "FAPI"

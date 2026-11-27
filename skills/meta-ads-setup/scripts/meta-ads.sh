@@ -12,7 +12,7 @@ environment="$FAPI_META_ADS_STATE_DIR/venv"
 
 require_python() {
     if [[ ! -x "$environment/bin/python" ]]; then
-        printf '%s\n' 'Začněte instalací připojení Meta Ads MCP.' >&2
+        printf '%s\n' 'Nejdřív spusťte install-cli nebo install-mcp.' >&2
         return 1
     fi
 }
@@ -50,15 +50,40 @@ install_component() {
     "$uv_command" pip install --python "$environment/bin/python" "$package"
 }
 
+open_token_prompt() {
+    if [[ "$(uname -s)" != Darwin ]]; then
+        printf 'Spusťte %s v místním interaktivním terminálu.\n' "$1" >&2
+        return 1
+    fi
+
+    local prompt_dir entry
+    prompt_dir="$(mktemp -d "${TMPDIR:-/tmp}/fapi-meta-ads-connect.XXXXXXXX")"
+    entry="$prompt_dir/Připojit Meta Ads.command"
+    {
+        printf '#!/bin/bash\n'
+        printf 'rm -f -- %q\nrmdir -- %q\n' "$entry" "$prompt_dir"
+        printf 'export FAPI_META_ADS_STATE_DIR=%q\n' "$FAPI_META_ADS_STATE_DIR"
+        printf 'exec /bin/bash %q %q\n' "$script_dir/meta-ads.sh" "$1"
+    } > "$entry"
+    chmod 700 "$entry"
+    if ! /usr/bin/open -a Terminal "$entry"; then
+        rm -f -- "$entry"
+        rmdir -- "$prompt_dir"
+        return 1
+    fi
+}
+
 case "${1:-}" in
     install-mcp)
         install_component mcp-proxy 'mcp-proxy==0.15.0'
         ;;
     install-cli)
-        require_python
-        "$environment/bin/python" "$script_dir/runtime.py" check-mcp
         install_component meta 'meta-ads==1.3.1'
         "$environment/bin/meta" --version
+        ;;
+    open-connect-mcp|open-connect-cli)
+        require_python
+        open_token_prompt "${1#open-}"
         ;;
     python)
         require_python
@@ -70,7 +95,7 @@ case "${1:-}" in
         exec "$environment/bin/python" "$script_dir/runtime.py" "$@"
         ;;
     *)
-        printf '%s\n' 'Použití: meta-ads.sh install-mcp|connect-mcp|check-mcp|install-cli|connect-cli|check-cli|status|python|cli|cli-json|mcp' >&2
+        printf '%s\n' 'Použití: meta-ads.sh install-mcp|connect-mcp|open-connect-mcp|check-mcp|install-cli|connect-cli|open-connect-cli|check-cli|status|python|cli|cli-json|mcp' >&2
         exit 2
         ;;
 esac

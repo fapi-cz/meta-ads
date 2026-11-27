@@ -1,12 +1,12 @@
 # Knihovna Meta Ads pro Codex a Claude Code
 
-Knihovna propojí reklamní účet s Meta Ads MCP a oficiálním Meta Ads CLI. Přidává skilly pro testovací reklamy, správu UTM a vyhodnocení kampaní. Použijte místní Codex nebo Claude Code na macOS, Linuxu nebo Windows. Ve Windows spouští klient instalaci, připojení a kontroly přes WSL. [Postup pro každý systém](skills/meta-ads-setup/references/platforms.md)
+Knihovna propojí reklamní účet s oficiálním Meta Ads CLI a s Ads MCP tam, kde ho Meta pro účet zpřístupnila. Přidává skilly pro testovací reklamy, správu UTM a vyhodnocení kampaní. Použijte místní Codex nebo Claude Code na macOS, Linuxu nebo Windows. Ve Windows spouští klient instalaci, připojení a kontroly přes WSL. [Postup pro každý systém](skills/meta-ads-setup/references/platforms.md)
 
 ## Start ze staženého repozitáře
 
 1. Na GitHubu zvolte **Code → Download ZIP** a složku rozbalte.
 2. V Codexu nebo Claude Code otevřete rozbalenou složku jako místní projekt. Pokud se aplikace zeptá na důvěru k projektu, potvrďte ji podle názvu a umístění složky.
-3. Napište **Pomoz mi vytvořit propojení s Meta Ads.** Agent pošle přímé odkazy a kroky pro registraci vývojáře a nastavení aplikace. Po potvrzení aplikace vás provede založením systémového uživatele a po potvrzení jeho přístupů vygenerováním a uložením tokenu. [Odkazy a postup v Metě](skills/meta-ads-setup/references/meta-browser.md)
+3. Napište **Pomoz mi vytvořit propojení s Meta Ads.** Agent připraví místní připojení a pošle zbývající kroky v Metě s přímými odkazy. Celé nastavení můžete projít na jeden zátah i podle návodu. [Odkazy a postup v Metě](skills/meta-ads-setup/references/meta-browser.md) · [Ruční propojení v Terminálu](skills/meta-ads-setup/references/platforms.md#připojení-v-terminálu)
 
 Pro používání ve všech místních projektech lze zkopírovat všechny čtyři složky ze `skills/` do `~/.agents/skills/` v Codexu nebo `~/.claude/skills/` v Claude Code. Spusťte novou místní konverzaci a použijte stejnou větu. Podporovaný je i import přímo z GitHubu podle kroků níže. [Složky Codex skillů](https://learn.chatgpt.com/docs/build-skills) · [Složky Claude Code skillů](https://code.claude.com/docs/en/skills)
 
@@ -43,7 +43,7 @@ Každý test má **jednu kampaň, jednu sadu a jednu reklamu**. Výchozí rozpo�
 ## Co si připravit
 
 - **Reklamní účet a přístup ke kampaním.** ID najdete ve Správci reklam u názvu účtu. Pokud nastavení firemního portfolia spravuje kolega, může vám pomoct s vytvořením aplikace a přiřazením přístupů.
-- **Token vložte do skryté výzvy v místním Terminálu.** Příkaz dostanete po nastavení aplikace a systémového uživatele. Token se uloží do Klíčenky na macOS nebo do soukromého souboru na Linuxu a ve WSL. Do chatu stačí potvrzení uložení.
+- **Token vložte do skryté výzvy v místním Terminálu.** Výzvu si připravte před vygenerováním tokenu. Na Macu ji může otevřít agent. Token se uloží do Klíčenky na macOS nebo do soukromého souboru na Linuxu a ve WSL. Do chatu stačí potvrzení uložení.
 - **Pokud se některý krok v Metě nedaří, napište agentovi název dialogu nebo text chyby.** Postup a řešení jsou v knihovně. [Nastavení přístupu v Metě](skills/meta-ads-setup/references/meta-browser.md)
 
-Agent nejdřív připojí a ověří MCP, potom ověří stejný účet přes CLI. K pozdější kontrole napište **Ověř mi připojení k Meta Ads.** Pro výměnu přístupu napište **Vyměň Meta Ads MCP token.**
+Agent ověří CLI a MCP samostatně. Pokud Meta účtu ještě nezpřístupnila MCP, stačí ověřené CLI. K pozdější kontrole napište **Ověř mi připojení k Meta Ads.** Pro výměnu přístupu napište **Vyměň Meta Ads MCP token.** [Dostupnost Ads MCP](https://en-gb.facebook.com/business/tools/ads-mcp-server)

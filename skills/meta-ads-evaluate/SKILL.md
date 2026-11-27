@@ -19,6 +19,7 @@ bash /absolute/path/to/meta-ads.sh cli-json insights get \
 ```
 
 - Pro sadu nebo reklamu použij `--adset-id` nebo `--ad-id` a příslušné pole s ID. U struktury 1 kampaň / 1 sada / 1 reklama načti výsledek každé testované varianty jednou na stejné úrovni. Pro průběh použij `--time-increment daily`. Když CLI vrátí `has_more: true`, zkrať jednotlivá období nebo použij stránkování v MCP.
+- Pro posledních N kampaní načti `id,name,created_time` a seřaď je podle vytvoření od nejnovější. Když výpis dosáhne `--limit`, ověř úplnost vyšším limitem nebo načti další stránky z Marketing API. Pokud uživatel neurčí období útraty, načti ji od vytvoření každé vybrané kampaně do aktuálního dne v časovém pásmu účtu.
 - Použij stejné období, měnu, definici konverze a nastavení atribuce pro porovnávané řádky. Uveď okno atribuce, pokud je ověřitelné pro daný report. Pokud zdroj ukazuje jen atribuční nastavení sady, uveď ho jako nastavení sady. Dosah a frekvenci vezmi z celého období na vyhodnocované úrovni.
 - Kampaně s malou útratou nejprve posuď podle efektivního stavu a termínu. Pojmenuj chybu přístupu, chybějící řádek nebo neznámou metriku podle toho, co zdroj skutečně vrátil. Zachovej číselnou nulu, pokud je doložená.
 

@@ -67,9 +67,13 @@ def verify_connection(action, credentials):
 
             account = run(load_mcp_account, credentials)
         except Exception:
-            sys.exit("MCP neodpovědělo. Zkontrolujte spojení, token a oprávnění ads_mcp_management.")
-        if account is None or account.get("is_ads_mcp_enabled") is False or account.get("is_queryable") is False:
-            sys.exit(f"MCP nepotvrdilo použitelný účet {expected}. Zkontrolujte přiřazení účtu a oprávnění aplikace.")
+            sys.exit("MCP neodpovědělo. Ověřte token přes check-cli a zkontrolujte oprávnění ads_mcp_management.")
+        if account is None:
+            sys.exit(f"MCP nevrátilo účet {expected}. Ověřte ID účtu a jeho přiřazení systémovému uživateli.")
+        if account.get("is_ads_mcp_enabled") is False:
+            sys.exit(f"Meta pro účet {expected} zatím nezpřístupnila Ads MCP. Použijte Meta Ads CLI.")
+        if account.get("is_queryable") is False:
+            sys.exit(f"Meta u účtu {expected} nepovolila čtení přes Ads MCP. Ověřte stav účtu ve Správci reklam.")
         channel = "mcp"
     else:
         try:
