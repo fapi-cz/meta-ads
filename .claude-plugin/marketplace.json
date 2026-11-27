@@ -1,0 +1,14 @@
+{
+  "name": "fapi-kurzy",
+  "description": "Skilly a nástroje pro účastníky kurzů FAPI.",
+  "owner": {
+    "name": "FAPI"
+  },
+  "plugins": [
+    {
+      "name": "fapi-meta-ads-course",
+      "source": "./",
+      "description": "Připojení reklamního účtu Meta pro účastníky kurzu FAPI."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "fapi-meta-ads-course",
+  "displayName": "Meta Ads pro kurz FAPI",
+  "version": "0.1.0",
+  "description": "Nastavení oficiálního Meta Ads CLI a Meta Ads MCP s ověřením obou přístupů.",
+  "author": {
+    "name": "FAPI"
+  },
+  "repository": "https://github.com/fapi-cz/meta-ads-course-skills",
+  "network": {
+    "hosts": [
+      "astral.sh",
+      "github.com",
+      "release-assets.githubusercontent.com",
+      "pypi.org",
+      "files.pythonhosted.org",
+      "graph.facebook.com",
+      "graph-video.facebook.com",
+      "mcp.facebook.com"
+    ]
+  }
+}
