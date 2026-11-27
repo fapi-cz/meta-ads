@@ -1,8 +1,8 @@
 {
   "name": "fapi-meta-ads-course",
   "displayName": "Meta Ads pro kurz FAPI",
-  "version": "0.2.0",
-  "description": "Připojení Meta Ads CLI a MCP, test 1 kampaň / 1 sada / 1 reklama a kontrola povinných UTM.",
+  "version": "0.3.0",
+  "description": "Připojení Meta Ads CLI a MCP, testovací reklamy s rozpočtem, povinné UTM a vyhodnocení kampaní.",
   "author": {
     "name": "FAPI"
   },

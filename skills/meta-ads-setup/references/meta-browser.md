@@ -2,22 +2,18 @@
 
 Použijte jeden reklamní účet z vlastního firemního portfolia. Ve Správci reklam ověřte jeho název a ID. K přiřazení aplikace a systémového uživatele pomůže správce portfolia, který má k těmto položkám přístup.
 
-## 1. Vývojářský účet a aplikace
+## 1. Přístup pro MCP
 
 1. Pod svým Facebook profilem se zaregistrujte v Meta for Developers. Dokončete ověření, které Meta nabídne. [Registrace vývojáře](https://developers.facebook.com/documentation/development/register)
-2. V **My Apps → Create App** založte aplikaci pod portfoliem firmy. Pro CLI vyberte použití **Create & manage ads with Marketing API**. Pro MCP přidejte **Create & manage ads with ads MCP server**. Pokud Meta nabídne obě použití spolu, použijte jednu aplikaci. Pokud druhé použití v dané aplikaci Meta nepovolí, založte samostatnou aplikaci ve stejném portfoliu. [Založení Meta aplikace](https://developers.facebook.com/documentation/development/create-an-app) · [Přístup k Meta Ads MCP](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-mcp-server/ads-mcp-server-get-started)
+2. V **My Apps → Create App** založte nebo otevřete aplikaci pod portfoliem firmy. Přidejte použití **Create & manage ads with ads MCP server**. [Založení Meta aplikace](https://developers.facebook.com/documentation/development/create-an-app) · [Přístup k Meta Ads MCP](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-mcp-server/ads-mcp-server-get-started)
+3. V **Meta Business Suite → Business Settings → Users → System Users** vytvořte systémového uživatele s rolí **Employee**. V **Accounts → Apps → Assign Users** ho přiřaďte k aplikaci. Přes **Ad Accounts** mu přidělte vybraný reklamní účet a právo spravovat jeho kampaně. Pro tvorbu reklam mu přiřaďte i používanou Facebook stránku.
+4. V **System Users → Generate Token** vyberte aplikaci a platnost. Pro MCP vyberte `ads_mcp_management` a `ads_management`. Token a ID účtu vložte do místního formuláře pro MCP, který připraví agent. Generování a uložení tokenu dělejte mimo videozáznam. [Oprávnění MCP](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-mcp-server/ads-mcp-server-get-started#permissions)
 
-## 2. Systémový uživatel
+## 2. Přístup pro CLI
 
-1. V **Meta Business Suite → Business Settings → Users → System Users** přidejte systémového uživatele s rolí **Employee**. Tato role funguje pro CLI a systémový token pro MCP ji vyžaduje.
-2. V **Accounts → Apps → Assign Users** přiřaďte uživatele k aplikaci nebo oběma aplikacím.
-3. Přiřaďte mu přes **Ad Accounts** vybraný účet s oprávněním ke správě kampaní. Pro tvorbu reklam mu přidělte i Facebook stránku, která bude u reklam vystupovat. [Přiřazení přístupů v Meta Business Suite](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-cli/setup/get-started#authentication)
+Agent pokračuje po ověření MCP. Pokud uložený token umožní i čtení přes CLI, použije ho pro obě cesty. Pro samostatný token přidejte v aplikaci použití **Create & manage ads with Marketing API**. Pokud Meta u stávající aplikace tuto kombinaci nenabídne, založte druhou ve stejném portfoliu a přiřaďte jí systémového uživatele.
 
-## 3. Token
-
-V **System Users → Generate Token** vyberte aplikaci a požadovanou platnost. Pro CLI Meta uvádí <code>ads_management</code>, <code>business_management</code>, <code>pages_show_list</code>, <code>pages_read_engagement</code>, <code>pages_manage_ads</code> a <code>read_insights</code>. Pro MCP vyberte <code>ads_mcp_management</code> a <code>ads_management</code>. Vyberte sjednocená oprávnění u společné aplikace a samostatné sady při použití dvou aplikací. [Oprávnění CLI](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-cli/setup/get-started#authentication) · [Oprávnění MCP](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-mcp-server/ads-mcp-server-get-started#permissions)
-
-Vložte token do místního formuláře, který poskytne agent. U společného tokenu stačí první pole. Generování a zobrazení tokenu provádějte mimo videozáznam.
+V **System Users → Generate Token** vyberte aplikaci pro Marketing API. Meta pro CLI uvádí `ads_management`, `business_management`, `pages_show_list`, `pages_read_engagement`, `pages_manage_ads` a `read_insights`. Vložte token do místního formuláře pro CLI. Agent použije ID účtu nastavené v prvním kroku. [Přístupy a oprávnění CLI](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-cli/setup/get-started#authentication)
 
 ## Když krok nefunguje
 
@@ -26,5 +22,5 @@ Vložte token do místního formuláře, který poskytne agent. U společného t
 | **System Users** nebo přidělení přístupu chybí | Jste ve správném firemním portfoliu a přihlášený člověk má oprávnění měnit jeho nastavení. |
 | Aplikaci nelze vybrat v **Generate Token** | Aplikace patří správnému portfoliu a je přiřazená systémovému uživateli. |
 | V dialogu chybí <code>ads_mcp_management</code> | Aplikace nabízí použití pro Ads MCP. Ověřte jeho nastavení a případné požadavky na schválení v dashboardu aplikace. |
-| CLI načte účet a MCP vrací chybu | Ověřte token MCP, roli **Employee** a <code>ads_mcp_management</code>. Po uložení nového tokenu znovu načtěte server. |
-| Účet se nezobrazuje ani v jednom výpisu | Porovnejte ID s tím ve Správci reklam a ověřte přiřazení reklamního účtu. Zkontrolujte platnost tokenu a správnou aplikaci. |
+| MCP nenajde vybraný účet | Porovnejte jeho ID s tím ve Správci reklam. Ověřte přiřazení účtu a dostupnost MCP pro vybraný účet. |
+| MCP funguje a CLI hlásí chybu přístupu | Ověřte použití pro Marketing API a oprávnění jeho tokenu. Po výměně tokenu nechte agenta opakovat kontrolu. |
