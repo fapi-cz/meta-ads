@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 
-LAUNCHER = Path(__file__).with_name("course-ads.sh")
+LAUNCHER = Path(__file__).with_name("meta-ads.sh")
 
 
 def launcher_json(*arguments):

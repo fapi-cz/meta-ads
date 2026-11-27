@@ -1,12 +1,12 @@
 {
-  "name": "fapi-meta-ads-course",
-  "displayName": "Meta Ads pro kurz FAPI",
+  "name": "fapi-meta-ads",
+  "displayName": "Meta Ads",
   "version": "0.3.0",
   "description": "Připojení Meta Ads CLI a MCP, testovací reklamy s rozpočtem, povinné UTM a vyhodnocení kampaní.",
   "author": {
     "name": "FAPI"
   },
-  "repository": "https://github.com/fapi-cz/meta-ads-course-skills",
+  "repository": "https://github.com/fapi-cz/meta-ads",
   "network": {
     "hosts": [
       "astral.sh",

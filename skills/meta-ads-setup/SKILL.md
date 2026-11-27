@@ -1,34 +1,36 @@
 ---
 name: meta-ads-setup
-description: Pomoz mi vytvořit propojení s Meta Ads. Proveď účastníka kurzu FAPI připojením reklamního účtu v Codexu nebo Claude Code, nejdřív přes oficiální Meta Ads MCP a potom přes oficiální CLI. Sprav také kontrolu připojení a výměnu tokenů.
+description: Připoj reklamní účet Meta Ads v Codexu nebo Claude Code přes oficiální MCP a CLI. Proveď založením aplikace a systémového uživatele, ověř přístup nebo pomoz vyměnit token.
 ---
 
-# Propojení s Meta Ads
+# Propojení Meta Ads
 
-Začni v jazyce účastníka. Na větu **„Pomoz mi vytvořit propojení s Meta Ads“** nejdřív stručně vypiš, co bude potřeba.
+Pracuj v místní relaci na macOS, Linuxu nebo Windows. Pro příkazy a registraci MCP použij [přesný postup pro daný systém](references/platforms.md). Otevři [nastavení v Metě](references/meta-browser.md). Pomocí `status` zjisti, zda už je místně uložený token. Pokud ano, pokračuj ověřením. Při novém připojení přijmi už potvrzené nastavení a začni prvním chybějícím krokem. Při výslovné žádosti o celý návod vypiš postup bodově.
 
-- Místní relace Codexu nebo Claude Code na macOS či Linuxu, na Windows v relaci vedené ve WSL.
-- Přihlášení do Meta for Developers, přístup správce k firemnímu portfoliu nebo pomoc jeho správce, reklamní účet a jeho ID.
-- Pro MCP aplikace s použitím **Create & manage ads with ads MCP server**, systémový uživatel s přístupem k účtu a token. Pro CLI se poté použije stejný token se správnými oprávněními nebo druhý token.
+## Nastav přístup ve třech krocích
 
-Otevři [návod pro Meta](references/meta-browser.md) a začni prvním chybějícím krokem. Tokeny zadává účastník ve formuláři na `127.0.0.1`. Příkazy spouští agent ze skutečné absolutní cesty `scripts/course-ads.sh` přes Bash. Pokud aplikace požádá o schválení místní instalace nebo přístupu k síti, pojmenuj konkrétní operaci.
+1. **Aplikace.** V první odpovědi dej bodový postup pro [registraci vývojáře](references/meta-browser.md#registrace-vývojáře) a [založení aplikace](references/meta-browser.md#založení-aplikace). Když už je vývojářský účet připravený, začni rovnou aplikací. Navrhni název podle firmy a uveď kontaktní e-mail, přesné použití a správné portfolio. Vyčkej na potvrzení aplikace a jejího nastavení.
+2. **Systémový uživatel.** Po potvrzení aplikace dej kroky pro [uživatele s rolí Employee](references/meta-browser.md#systémový-uživatel). Vyčkej na potvrzení, že má přiřazenou aplikaci a vybraný reklamní účet.
+3. **Token.** Po potvrzení obou kroků vysvětli [vygenerování tokenu pro MCP](references/meta-browser.md#token-pro-mcp) a spusť `install-mcp`. Dej uživateli přesný příkaz `connect-mcp` pro jeho [místní terminál](references/platforms.md). Zadá ID účtu a vloží token do skryté výzvy. Na macOS ho uloží Klíčenka, na Linuxu a ve WSL soukromý soubor mimo repozitář. Do chatu stačí potvrzení uložení. Potom spusť `status` a navaž ověřením.
 
-## 1. Meta Ads MCP
+Pro běžné nastavení použij kroky a názvy voleb uvedené v referenci. Při zádrhelu zjisti, u kterého kroku je uživatel a jakou hlášku vidí. Navazuj podle [řešení potíží](references/meta-browser.md#když-krok-nefunguje). Příkazy kromě zadání tokenu spouští agent.
 
-1. Spusť `install-mcp` a zjisti stav pomocí `status`. Pokud schází token, proveď účastníka Meta kroky pro MCP a spusť `connect-mcp` na pozadí. Pošli mu přesný odkaz vypsaný skriptem. Do místního formuláře vloží ID účtu a token MCP. Po uložení přístupu na něj navaž.
-2. Připoj místní server `fapi-course-meta-ads` v daném klientovi.
-   - V Codexu spusť `codex mcp add fapi-course-meta-ads -- bash /absolutní/cesta/course-ads.sh mcp`. Pro macOS desktop použij také známou cestu `/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex`. Při chybějícím příkazu ukaž hodnoty do polí **Settings → MCP servers → Add server → STDIO**.
-   - V Claude Code server načte kurzový plugin nebo soubor `.mcp.json` z otevřeného kurzového repozitáře. U samostatně zkopírovaných skillů může agent server připojit pomocí `claude mcp add --scope user fapi-course-meta-ads -- bash /absolutní/cesta/course-ads.sh mcp`. Pokud aplikace žádá o povolení projektového serveru, účastník jej potvrdí v aplikaci.
-3. `install-cli` nejprve samo zavolá přes MCP `ads_get_ad_accounts` a zkontroluje vybraný účet. Pokračuj podle výsledku skriptu. Chybu MCP řeš podle [nápovědy](references/meta-browser.md#když-krok-nefunguje) a příkaz zopakuj až po opravě. Při obnovení klienta lze v novém chatu pokračovat stejnou úvodní větou. Pokud registrace vyžaduje novou relaci, řekni účastníkovi, kde server po otevření relace uvidí.
+## Připoj Meta Ads MCP
 
-## 2. Meta Ads CLI
+Meta podporuje OAuth i token systémového uživatele. Knihovna používá systémového uživatele pro opakovaný přístup k vybranému účtu. Stejný typ tokenu podporuje také CLI. [Ověřování v Meta Ads MCP](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-mcp-server/ads-mcp-server-get-started#authentication)
 
-1. Po kladném ověření MCP `install-cli` nainstaluje oficiální CLI. Spusť `check-cli`. Skript ověří stejné ID účtu a načte výpis kampaní. K prázdnému účtu stačí úspěšný prázdný výpis.
-2. Pokud společný token pro CLI nestačí, projdi [kroky pro CLI](references/meta-browser.md#2-přístup-pro-cli). Spusť `connect-cli` a dej účastníkovi jeho adresu. Po uložení tokenu spusť znovu `check-cli`.
-3. Uveď ID účtu a výsledek pro každou cestu podle výstupu skriptů. Dostupnost nástrojů přímo v klientovi uveď podle toho, co ukázala aktuální relace.
+1. Spusť `check-mcp`. Příkaz zavolá oficiální server na `https://mcp.facebook.com/ads` a přes `ads_get_ad_accounts` ověří vybrané ID účtu. Při chybě postupuj podle [nápovědy](references/meta-browser.md#když-krok-nefunguje).
+2. V klientovi použij funkční připojení k této knihovně nebo zaregistruj místní STDIO server `fapi-meta-ads` podle [příkazů pro Codex a Claude Code](references/platforms.md).
+3. Zkontroluj dostupnost Meta Ads nástrojů v klientovi. Pokud se načtou až po obnovení, uveď cestu **Settings → MCP servers** a příkaz `/mcp` pro kontrolu v nové místní relaci Codexu.
 
-## Další práce
+## Ověř oficiální Meta Ads CLI
 
-- Při žádosti o ověření přístupu spusť `check-mcp` a poté `check-cli`. Při výměně tokenu obnov příslušný místní formulář, znovu ověř přístup a případně obnov relaci s MCP serverem.
-- K práci s Meta Ads používej připojené MCP nástroje nebo `cli-json` pro oficiální CLI. Vybraný účet je uložený ve formuláři. Do MCP operací vyžadujících účet předej toto ID. Při zápisu s nejasným výsledkem ověř uložený stav před dalším pokusem.
-- Použij [meta-ads-test](../meta-ads-test/SKILL.md) pro vytvoření testu, [meta-ads-utm](../meta-ads-utm/SKILL.md) při práci s kreativitou a před zapnutím reklam s webovým odkazem a [meta-ads-evaluate](../meta-ads-evaluate/SKILL.md) pro vyhodnocení.
+1. Po ověření MCP spusť `install-cli` a `check-cli`. Kontrola ověří stejné ID účtu a výpis kampaní. Úspěšný prázdný výpis u nového účtu stačí.
+2. Pokud společný token nestačí, dej postup pro [samostatný token CLI](references/meta-browser.md#token-pro-cli) a přesný příkaz `connect-cli` pro místní terminál. Po potvrzení zopakuj `check-cli`.
+3. Uveď ověřené ID účtu, výsledek MCP a CLI a dostupnost MCP nástrojů v aktuálním klientovi.
+
+## Kontrola, výměna a další práce
+
+- Při ověření přístupu spusť `check-mcp` a `check-cli`. Pokud uživatel používá vlastní spojení přes OAuth, ověř MCP nástrojem `ads_get_ad_accounts` přímo v klientovi. Při výměně dej odpovídající příkaz `connect-mcp` nebo `connect-cli` pro Terminál a ověř nový přístup. Pokud klient používá původní token, obnov jeho relaci.
+- Pro práci s reklamami používej Meta Ads MCP nebo oficiální CLI přes `cli-json`. ID vybraného účtu převezmi ze `status`. Při zápisu s nejasným výsledkem ověř uložený stav před dalším pokusem.
+- Pro reklamy použij [meta-ads-test](../meta-ads-test/SKILL.md), pro UTM [meta-ads-utm](../meta-ads-utm/SKILL.md) a pro výkonnost [meta-ads-evaluate](../meta-ads-evaluate/SKILL.md).

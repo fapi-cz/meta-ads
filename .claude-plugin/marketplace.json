@@ -1,14 +1,14 @@
 {
-  "name": "fapi-kurzy",
-  "description": "Skilly a nástroje pro účastníky kurzů FAPI.",
+  "name": "fapi-ads",
+  "description": "Skilly a nástroje FAPI pro práci s Meta Ads.",
   "owner": {
     "name": "FAPI"
   },
   "plugins": [
     {
-      "name": "fapi-meta-ads-course",
+      "name": "fapi-meta-ads",
       "source": "./",
-      "description": "Připojení Meta Ads, testovací reklamy s rozpočtem, povinné UTM a vyhodnocení kampaní pro kurz FAPI."
+      "description": "Připojení Meta Ads, testovací reklamy, kontrola UTM a vyhodnocení kampaní."
     }
   ]
 }

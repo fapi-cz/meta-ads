@@ -1,8 +1,8 @@
 {
   "mcpServers": {
-    "fapi-course-meta-ads": {
+    "fapi-meta-ads": {
       "command": "bash",
-      "args": ["${CLAUDE_PLUGIN_ROOT:-.}/skills/meta-ads-setup/scripts/course-ads.sh", "mcp"]
+      "args": ["${CLAUDE_PLUGIN_ROOT:-.}/skills/meta-ads-setup/scripts/meta-ads.sh", "mcp"]
     }
   }
 }

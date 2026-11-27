@@ -2,36 +2,21 @@ import fcntl
 import json
 import os
 import re
-import secrets
 import subprocess
 import sys
 import tempfile
-import time
-from http.server import BaseHTTPRequestHandler, HTTPServer
+import warnings
+from getpass import GetPassWarning, getpass
 from pathlib import Path
-from urllib.parse import parse_qs, quote, quote_plus
+from urllib.parse import quote, quote_plus
 
 
 STATE_DIR = Path(os.environ["FAPI_META_ADS_STATE_DIR"]).resolve()
 CREDENTIALS = STATE_DIR / "credentials.json"
 META_MCP_URL = "https://mcp.facebook.com/ads"
-FORM = """<!doctype html>
-<html lang="cs"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
-<title>Připojení Meta Ads</title>
-<style>
-body{font:1rem/1.5 system-ui;margin:3rem auto;padding:0 1.25rem;max-width:32rem}
-label,input,button{display:block}input{box-sizing:border-box;width:100%;padding:.5rem;margin:.25rem 0 1rem}
-button{font:inherit;padding:.5rem 1rem}
-</style>
-<h1>Připojení CHANNEL</h1>
-<p>Přístup se uloží do soukromé složky tohoto počítače.</p>
-<form method="post" autocomplete="off">
-ACCOUNT_INPUT
-<label for="token">Token pro CHANNEL</label>
-<input id="token" name="token" type="password" required>
-<button>Uložit přístup</button>
-</form>
-</html>"""
+KEYCHAIN = "/usr/bin/security"
+KEYCHAIN_REFERENCE = {"storage": "keychain"}
+TOKEN_PATTERN = re.compile(r"[\x21-\x7e]{1,4096}")
 
 
 def save_credentials(values):
@@ -57,114 +42,87 @@ def load_credentials(required=True):
         pass
     if not required:
         return {}
-    sys.exit("Uložte přístup k Meta Ads MCP pomocí místního formuláře.")
+    sys.exit("Uložte přístup k Meta Ads MCP příkazem connect-mcp v místním Terminálu.")
 
 
-def update_credentials(channel, token, account):
+def keychain_item(channel, account):
+    return ["-s", f"fapi-meta-ads-{channel}", "-a", account]
+
+
+def read_token(channel, credentials):
+    stored = credentials.get(channel)
+    if stored != KEYCHAIN_REFERENCE:
+        return stored if isinstance(stored, str) else ""
+
+    message = f"Token {channel.upper()} v Klíčence je nepřístupný nebo neplatný. Použijte connect-{channel}."
+    try:
+        result = subprocess.run(
+            [KEYCHAIN, "find-generic-password", *keychain_item(channel, credentials["account"]), "-w"],
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=10,
+        )
+    except (OSError, subprocess.SubprocessError):
+        sys.exit(message)
+    token = result.stdout.rstrip("\r\n")
+    if not TOKEN_PATTERN.fullmatch(token):
+        sys.exit(message)
+    return token
+
+
+def prompt_token(channel, account):
+    if sys.platform == "darwin":
+        print(f"Zadejte token {channel.upper()} do skryté výzvy Klíčenky.", flush=True)
+        try:
+            subprocess.run(
+                [KEYCHAIN, "add-generic-password", "-U", *keychain_item(channel, account), "-w"],
+                check=True,
+            )
+        except (OSError, subprocess.CalledProcessError):
+            sys.exit("Token se nepodařilo uložit do Klíčenky.")
+        read_token(channel, {"account": account, channel: KEYCHAIN_REFERENCE})
+        return KEYCHAIN_REFERENCE
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error", GetPassWarning)
+        try:
+            token = getpass(f"Token {channel.upper()}: ").strip()
+        except GetPassWarning:
+            sys.exit("Terminál nepodporuje skryté zadání tokenu.")
+    if not TOKEN_PATTERN.fullmatch(token):
+        sys.exit("Zadaný token nemá platný formát.")
+    return token
+
+
+def update_credentials(channel, account):
     with (STATE_DIR / ".credentials.lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         previous = load_credentials(required=False)
         if channel == "cli" and previous.get("account") != account:
-            raise ValueError("Reklamní účet byl mezitím změněn. Otevřete nový formulář CLI.")
-        values = {**previous, channel: token, "account": account}
+            sys.exit("Reklamní účet byl mezitím změněn. Spusťte znovu connect-cli.")
+        stored = prompt_token(channel, account)
+        values = {**previous, channel: stored, "account": account}
         if channel == "mcp" and previous.get("account") != account:
             values.pop("cli", None)
         save_credentials(values)
 
 
 def connect(channel):
-    account_input = ""
-    cli_account = None
-    if channel == "mcp":
-        account_input = (
-            '<label for="account">ID reklamního účtu</label>'
-            '<input id="account" name="account" placeholder="act_123456789" required>'
-        )
-    else:
-        cli_account = load_credentials()["account"]
-    form = FORM.replace("CHANNEL", f"Meta Ads {channel.upper()}").replace("ACCOUNT_INPUT", account_input)
-    form_path = "/" + secrets.token_urlsafe(24)
-    saved = False
+    if not sys.stdin.isatty():
+        sys.exit(f"Spusťte connect-{channel} v místním Terminálu pro skryté zadání tokenu.")
 
-    class ConnectionPage(BaseHTTPRequestHandler):
-        def setup(self):
-            self.request.settimeout(10)
-            super().setup()
-
-        def log_message(self, *_args):
-            return
-
-        def send_page(self, status, page):
-            body = page.encode("utf-8")
-            self.send_response(status)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.send_header("Cache-Control", "no-store")
-            self.send_header("Referrer-Policy", "same-origin")
-            self.send_header(
-                "Content-Security-Policy",
-                "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'",
-            )
-            self.end_headers()
-            self.wfile.write(body)
-
-        def valid_request(self):
-            return self.path == form_path and self.headers.get("Host") == host
-
-        def do_GET(self):
-            if not self.valid_request():
-                self.send_page(404, "Odkaz na formulář není platný.")
-                return
-            self.send_page(200, form)
-
-        def do_POST(self):
-            nonlocal saved
-            if not self.valid_request() or self.headers.get("Origin") != origin:
-                self.send_page(403, "Otevřete formulář z odkazu v chatu.")
-                return
-
-            try:
-                length = int(self.headers.get("Content-Length", "0"))
-                if not 0 < length <= 8192:
-                    raise ValueError
-                if self.headers.get_content_type() != "application/x-www-form-urlencoded":
-                    raise ValueError
-                fields = parse_qs(self.rfile.read(length).decode("utf-8"), max_num_fields=2)
-                token = fields.get("token", [""])[0].strip()
-                if not re.fullmatch(r"[\x21-\x7e]{1,4096}", token):
-                    raise ValueError
-                account = cli_account
-                if channel == "mcp":
-                    account = fields.get("account", [""])[0].strip().removeprefix("act_")
-                    if not re.fullmatch(r"[0-9]{1,32}", account):
-                        raise ValueError
-                    account = f"act_{account}"
-            except (UnicodeError, ValueError):
-                self.send_page(400, '<meta charset="utf-8"><p>Zkontrolujte vyplněné údaje.</p>' + form)
-                return
-
-            try:
-                update_credentials(channel, token, account)
-            except ValueError as error:
-                self.send_page(409, str(error))
-                return
-            except OSError:
-                self.send_page(500, '<meta charset="utf-8"><p>Přístup se nepodařilo uložit. Vraťte se do chatu.</p>')
-                return
-            saved = True
-            self.send_page(200, '<meta charset="utf-8"><p>Přístup je uložený. Vraťte se do chatu.</p>')
-
-    with HTTPServer(("127.0.0.1", 0), ConnectionPage) as server:
-        host = f"127.0.0.1:{server.server_port}"
-        origin = f"http://{host}"
-        print(f"{origin}{form_path}", flush=True)
-        deadline = time.monotonic() + 600
-        while not saved and time.monotonic() < deadline:
-            server.timeout = min(1, deadline - time.monotonic())
-            server.handle_request()
-
-    if not saved:
-        sys.exit("Platnost odkazu vypršela. Otevřete nový formulář z chatu.")
+    try:
+        if channel == "mcp":
+            account = input("ID reklamního účtu: ").strip().removeprefix("act_")
+            if not re.fullmatch(r"[0-9]{1,32}", account):
+                sys.exit("Zkontrolujte ID reklamního účtu.")
+            account = f"act_{account}"
+        else:
+            account = load_credentials()["account"]
+        update_credentials(channel, account)
+    except (EOFError, KeyboardInterrupt):
+        sys.exit("Zadávání přístupu bylo ukončeno.")
     print(f"Přístup {channel.upper()} uložen.")
 
 
@@ -179,27 +137,28 @@ def tool_command(channel, arguments, credentials):
     for key in ("APP_ID", "APP_SECRET", "BUSINESS_ID", "ACCESS_TOKEN", "API_ACCESS_TOKEN"):
         environment.pop(key, None)
     if channel == "mcp":
-        if not credentials.get("mcp"):
-            sys.exit("Uložte nejdřív token MCP v místním formuláři.")
+        token = read_token("mcp", credentials)
+        if not token:
+            sys.exit("Uložte token MCP příkazem connect-mcp v místním Terminálu.")
         program = STATE_DIR / "venv" / "bin" / "mcp-proxy"
-        environment["API_ACCESS_TOKEN"] = credentials["mcp"]
+        environment["API_ACCESS_TOKEN"] = token
         command = [str(program), "--transport", "streamablehttp", META_MCP_URL]
     else:
         if any(
             arg.split("=", 1)[0] in {"--debug", "--ad-account-id", "--business-id"}
             for arg in arguments
         ):
-            sys.exit("Pro výběr účtu použijte formulář pro připojení.")
+            sys.exit("Pro výběr účtu použijte connect-mcp.")
         program = STATE_DIR / "venv" / "bin" / "meta"
-        token = credentials.get("cli") or credentials.get("mcp")
+        token = read_token("cli" if credentials.get("cli") else "mcp", credentials)
         if not token:
-            sys.exit("Nejprve uložte přístup v místním formuláři.")
+            sys.exit("Uložte přístup příkazem connect-mcp nebo connect-cli v místním Terminálu.")
         environment["ACCESS_TOKEN"] = token
         environment["AD_ACCOUNT_ID"] = credentials["account"]
         options = ["--output", "json", "--no-input"] if channel == "cli-json" else []
         command = [str(program), *options, "ads", *arguments]
     if not program.is_file():
-        sys.exit(f"Program {program.name} vyžaduje instalaci přes kurzový skill.")
+        sys.exit(f"Program {program.name} vyžaduje instalaci přes meta-ads-setup.")
     return command, environment
 
 

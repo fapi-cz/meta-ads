@@ -1,6 +1,6 @@
 ---
 name: meta-ads-test
-description: Připrav, založ a ověř testovací reklamu na Facebooku nebo Instagramu v kurzu FAPI. Použij jednu kampaň, jednu sadu a jednu reklamu, výchozí denní rozpočet 200 Kč a povinné UTM.
+description: Připrav, založ a ověř testovací reklamu na Facebooku nebo Instagramu. Použij jednu kampaň, jednu sadu a jednu reklamu, výchozí denní rozpočet 200 Kč a povinné UTM.
 ---
 
 # Testovací reklama v Metě
@@ -9,7 +9,7 @@ Pro jednu testovanou variantu použij **1 kampaň → 1 sada reklam → 1 reklam
 
 ## Příprava
 
-1. Ověř název a ID reklamního účtu, měnu a časové pásmo. Při chybějícím připojení použij [meta-ads-setup](../meta-ads-setup/SKILL.md). Použij ověřené nástroje Meta Ads MCP nebo `cli-json` ze stejného skillu. Příkazy spouští agent.
+1. Ověř název a ID reklamního účtu, měnu a časové pásmo. Při chybějícím připojení použij [meta-ads-setup](../meta-ads-setup/SKILL.md). Použij ověřené nástroje Meta Ads MCP nebo `cli-json` ze stejného skillu. Skripty spouštěj přes `meta-ads.sh python` podle [postupu pro daný systém](../meta-ads-setup/references/platforms.md).
 2. Z briefu, dostupných podkladů a případné referenční kampaně zjisti cíl, cílovou URL, identitu FB stránky či IG účtu, text a soubor nebo ID média, publikum, rozpočet, měnu a dobu běhu. Pro konverzní cíl ověř také odpovídající datovou sadu a událost. Dotaž se pouze na chybějící rozhodnutí. Při kopírování použij jen nastavení, která odpovídají zadání testu.
 3. Urči rozpočet podle pravidel níže. Před vytvořením nebo duplikováním reklamy použij [meta-ads-utm](../meta-ads-utm/SKILL.md) na cílový odkaz a případnou zděděnou kreativu. Hodnotu `url_tags` připrav předem. Chybějící nebo neověřitelné UTM blokuje uložení reklamy k doručování i její spuštění.
 
