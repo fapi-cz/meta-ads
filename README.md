@@ -6,7 +6,7 @@ Knihovna propojí reklamní účet s Meta Ads MCP a oficiálním Meta Ads CLI. P
 
 1. Na GitHubu zvolte **Code → Download ZIP** a složku rozbalte.
 2. V Codexu nebo Claude Code otevřete rozbalenou složku jako místní projekt. Pokud se aplikace zeptá na důvěru k projektu, potvrďte ji podle názvu a umístění složky.
-3. Napište **Pomoz mi vytvořit propojení s Meta Ads.** Agent pošle kroky pro registraci vývojáře a vytvoření aplikace. Po potvrzení aplikace vás provede vytvořením systémového uživatele a po potvrzení jeho přístupů uložením tokenu.
+3. Napište **Pomoz mi vytvořit propojení s Meta Ads.** Agent pošle přímé odkazy a kroky pro registraci vývojáře a nastavení aplikace. Po potvrzení aplikace vás provede založením systémového uživatele a po potvrzení jeho přístupů vygenerováním a uložením tokenu. [Odkazy a postup v Metě](skills/meta-ads-setup/references/meta-browser.md)
 
 Pro používání ve všech místních projektech lze zkopírovat všechny čtyři složky ze `skills/` do `~/.agents/skills/` v Codexu nebo `~/.claude/skills/` v Claude Code. Spusťte novou místní konverzaci a použijte stejnou větu. Podporovaný je i import přímo z GitHubu podle kroků níže. [Složky Codex skillů](https://learn.chatgpt.com/docs/build-skills) · [Složky Claude Code skillů](https://code.claude.com/docs/en/skills)
 

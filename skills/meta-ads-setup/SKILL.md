@@ -9,9 +9,11 @@ Pracuj v místní relaci na macOS, Linuxu nebo Windows. Pro příkazy a registra
 
 ## Nastav přístup ve třech krocích
 
-1. **Aplikace.** V první odpovědi dej bodový postup pro [registraci vývojáře](references/meta-browser.md#registrace-vývojáře) a [založení aplikace](references/meta-browser.md#založení-aplikace). Když už je vývojářský účet připravený, začni rovnou aplikací. Navrhni název podle firmy a uveď kontaktní e-mail, přesné použití a správné portfolio. Vyčkej na potvrzení aplikace a jejího nastavení.
-2. **Systémový uživatel.** Po potvrzení aplikace dej kroky pro [uživatele s rolí Employee](references/meta-browser.md#systémový-uživatel). Vyčkej na potvrzení, že má přiřazenou aplikaci a vybraný reklamní účet.
-3. **Token.** Po potvrzení obou kroků vysvětli [vygenerování tokenu pro MCP](references/meta-browser.md#token-pro-mcp) a spusť `install-mcp`. Dej uživateli přesný příkaz `connect-mcp` pro jeho [místní terminál](references/platforms.md). Zadá ID účtu a vloží token do skryté výzvy. Na macOS ho uloží Klíčenka, na Linuxu a ve WSL soukromý soubor mimo repozitář. Do chatu stačí potvrzení uložení. Potom spusť `status` a navaž ověřením.
+V každé etapě pošli uživateli do chatu přímý klikací odkaz do Mety a krátký bodový postup z odpovídající části reference.
+
+1. **Aplikace.** V první odpovědi pošli odkaz na [registraci vývojáře](references/meta-browser.md#registrace-vývojáře) a přímé odkazy pro [vytvoření a nastavení aplikace](references/meta-browser.md#založení-aplikace). Když už je vývojářský účet připravený, začni rovnou aplikací. Navrhni název podle firmy a uveď kontaktní e-mail, přesné použití a správné portfolio. Vyčkej na potvrzení aplikace a jejího nastavení.
+2. **Systémový uživatel.** Po potvrzení aplikace pošli odkaz do nastavení systémových uživatelů a kroky pro [uživatele s rolí Employee](references/meta-browser.md#systémový-uživatel). Vyčkej na potvrzení, že má přiřazenou aplikaci a vybraný reklamní účet. Pro tvorbu reklam ověř i přiřazení Facebook stránky.
+3. **Token.** Po potvrzení obou kroků pošli odkaz do nastavení [systémových uživatelů](references/meta-browser.md#token-pro-mcp), kde se volí **Generate Token**, a odkaz do Správce reklam pro ID účtu. Spusť `install-mcp` a dej uživateli přesný příkaz `connect-mcp` pro jeho [místní terminál](references/platforms.md). Zadá ID účtu a vloží token do skryté výzvy. Na macOS ho uloží Klíčenka, na Linuxu a ve WSL soukromý soubor mimo repozitář. Do chatu stačí potvrzení uložení. Potom spusť `status` a navaž ověřením.
 
 Pro běžné nastavení použij kroky a názvy voleb uvedené v referenci. Při zádrhelu zjisti, u kterého kroku je uživatel a jakou hlášku vidí. Navazuj podle [řešení potíží](references/meta-browser.md#když-krok-nefunguje). Příkazy kromě zadání tokenu spouští agent.
 

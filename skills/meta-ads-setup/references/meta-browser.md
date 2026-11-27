@@ -4,27 +4,29 @@ Použijte firemní portfolio, které vlastní nebo spravuje zamýšlený reklamn
 
 ## Registrace vývojáře
 
-1. Přihlaste se svým stávajícím Facebook profilem a v Meta for Developers klikněte na **Get Started**. [Registrace](https://developers.facebook.com/async/registration)
+1. Přihlaste se svým stávajícím Facebook profilem a otevřete registraci v Meta for Developers. [Zaregistrovat se jako vývojář](https://developers.facebook.com/async/registration)
 2. Potvrďte podmínky a pravidla pro vývojáře. Ověřte telefon a e-mail podle výzev Mety.
-3. Vyberte nejbližší povolání nebo roli a dokončete registraci. Výsledek ověřte v **My Apps**. [Postup registrace](https://developers.facebook.com/documentation/development/register)
+3. Vyberte nejbližší povolání nebo roli a dokončete registraci. V **My Apps** ověřte, že je dostupná volba **Create App**. [Otevřít My Apps](https://developers.facebook.com/apps/) · [Postup registrace](https://developers.facebook.com/documentation/development/register)
 
 ## Založení aplikace
 
 1. V **My Apps → Create App** zadejte například **Správa reklam MojeFirma** a firemní kontaktní e-mail. Pro jméno použijte svůj firemní název a účel aplikace. [Vytvořit aplikaci](https://developers.facebook.com/apps/creation/) · [Pravidla názvů](https://developers.facebook.com/docs/app-review/resources/logos/)
 2. V **Use cases** zvolte **Create & manage ads with ads MCP server**. Pokud Meta v téže aplikaci nabízí kompatibilní použití pro Marketing API, přidejte ho pro CLI. V **Business** vyberte portfolio vybraného reklamního účtu. [Nastavení pro Meta Ads MCP](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-mcp-server/ads-mcp-server-get-started) · [Kombinace použití aplikace](https://developers.facebook.com/documentation/development/create-an-app#what-are-use-cases)
-3. Projděte **Requirements** podle toho, co Meta zobrazuje pro váš případ. V **Overview** zkontrolujte název, portfolio a použití a klikněte na **Go to dashboard**. V dashboardu potvrďte, že vidíte aplikaci se správným použitím. [Postup založení aplikace](https://developers.facebook.com/documentation/development/create-an-app#app-creation-steps)
+3. Projděte **Requirements** podle toho, co Meta zobrazuje pro váš případ. V **Overview** zkontrolujte název, portfolio a použití a klikněte na **Go to dashboard**. Pro kontrolu nebo změnu nastavení později vyberte aplikaci v **My Apps** a otevřete **Use cases**. [Otevřít nastavení aplikace v My Apps](https://developers.facebook.com/apps/) · [Postup založení aplikace](https://developers.facebook.com/documentation/development/create-an-app#app-creation-steps)
 
 ## Systémový uživatel
 
-1. Ve správném portfoliu otevřete **Meta Business Suite → Business Settings → Users → System Users → Add**. Zadejte například **Správa reklam** a vyberte roli **Employee**.
-2. V **Accounts → Apps** vyberte aplikaci, klikněte na **Assign Users** a přiřaďte systémového uživatele. V **Accounts → Ad Accounts** mu přidělte vybraný reklamní účet a právo spravovat kampaně.
-3. Pro tvorbu reklam přiřaďte používanou Facebook stránku přímo systémovému uživateli přes **System Users → Assign Assets → Pages** a povolte inzerci na této stránce. Zkontrolujte přiřazení aplikace, účtu a stránky. Ve Správci reklam si poznamenejte ID vybraného reklamního účtu. [Přiřazení aplikace, reklamního účtu a stránky](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-cli/setup/get-started#authentication)
+1. V nastavení firmy vyberte správné portfolio a otevřete **Users → System Users → Add**. Zadejte například **Správa reklam** a vyberte roli **Employee**. [Otevřít systémové uživatele](https://business.facebook.com/settings/system-users)
+2. V **Accounts → Apps** vyberte aplikaci, klikněte na **Assign Users** a přiřaďte systémového uživatele. V **Accounts → Ad Accounts** mu přidělte vybraný reklamní účet a právo spravovat kampaně. [Otevřít nastavení firmy](https://business.facebook.com/settings/)
+3. Pro tvorbu reklam přiřaďte používanou Facebook stránku přímo systémovému uživateli přes **System Users → Assign Assets → Pages** a povolte inzerci na této stránce. Zkontrolujte přiřazení aplikace, účtu a stránky. [Přiřazení aplikace, reklamního účtu a stránky](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-cli/setup/get-started#authentication)
 
 ## Token pro MCP
 
-V **System Users → Generate Token** vyberte připojenou aplikaci. V nabídce platnosti zvolte **Never**, pokud chcete token bez časového omezení a Meta tuto možnost pro vaše portfolio nabízí. Některá portfolia musí používat 60denní token. I token bez expirace lze odvolat. [Platnost systémových tokenů](https://developers.facebook.com/docs/business-management-apis/system-users/install-apps-and-generate-tokens/)
+Otevřete **System Users**, vyberte vytvořeného uživatele a klikněte na **Generate Token**. Vyberte přiřazenou aplikaci. V nabídce platnosti zvolte **Never**, pokud chcete token bez časového omezení a Meta tuto možnost pro vaše portfolio nabízí. Některá portfolia musí používat 60denní token. I token bez expirace lze odvolat. [Otevřít systémové uživatele](https://business.facebook.com/settings/system-users) · [Platnost systémových tokenů](https://developers.facebook.com/docs/business-management-apis/system-users/install-apps-and-generate-tokens/)
 
-Zaškrtněte `ads_mcp_management` a `ads_management` pro správu reklam. Pro společný token přidejte také [oprávnění pro CLI](#token-pro-cli), pokud je aplikace nabízí. Token zadejte na svém počítači do skryté výzvy příkazu `connect-mcp`, který vám agent připraví. ID lze zadat s předponou `act_` i jako číslo. V chatu stačí potvrdit uložení. [Oprávnění MCP](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-mcp-server/ads-mcp-server-get-started#permissions)
+Zaškrtněte `ads_mcp_management` a `ads_management` pro správu reklam. Pro společný token přidejte také [oprávnění pro CLI](#token-pro-cli), pokud je aplikace nabízí. [Oprávnění MCP](https://developers.facebook.com/documentation/ads-commerce/ads-ai-connectors/ads-mcp-server/ads-mcp-server-get-started#permissions)
+
+Ve Správci reklam vyberte stejný účet a zkopírujte jeho ID. V místním terminálu spusťte příkaz `connect-mcp`, který připraví agent, zadejte ID s předponou `act_` nebo jako číslo a token vložte do skryté výzvy. V chatu stačí potvrdit uložení. [Otevřít Správce reklam](https://adsmanager.facebook.com/adsmanager/manage/campaigns)
 
 ## Token pro CLI
 
