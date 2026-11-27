@@ -2,12 +2,22 @@
 
 Účastník kurzu nastaví přístupy ve svém účtu Meta. Agent nainstaluje oficiální Meta Ads CLI, připojí Meta Ads MCP a ověří reklamní účet oběma cestami. Průvodce běží v místní relaci Codexu nebo Claude Code na macOS nebo Linuxu. Na Windows potřebuje místní relaci ve WSL.
 
+## Co skilly umí
+
+| Skill | Co napsat agentovi |
+| --- | --- |
+| [Připojení Meta Ads](skills/meta-ads-setup/SKILL.md) | **Nastav mi Meta Ads podle kurzu FAPI.** |
+| [Testovací reklama](skills/meta-ads-test/SKILL.md) | **Založ mi pozastavený test podle kurzu FAPI. Použij přiložené video, odkaz a text. Rozpočet je 200 Kč denně.** |
+| [Kontrola a oprava UTM](skills/meta-ads-utm/SKILL.md) | **Zkontroluj, jestli má reklama s ID … správně nastavené UTM.** Pro potvrzenou opravu napište **Oprav UTM u této reklamy.** |
+
+Každý test má **jednu kampaň, jednu sadu a jednu reklamu**. Připravte cílovou stránku, podklady k reklamě, publikum, rozpočet a plán testu. Agent před spuštěním ověří UTM na uložené reklamě. U kampaně měřené ve FAPI mu doplňte také kód kampaně pro `ref_code`.
+
 ## Codex Desktop
 
 1. Otevřete Codex v desktopové aplikaci a zvolte místní práci na vašem počítači.
 2. Do chatu vložte tento text.
 
-   > $skill-installer Nainstaluj mi skill z https://github.com/fapi-cz/meta-ads-course-skills/tree/main/skills/meta-ads-setup. Použij toto umístění.
+   > $skill-installer Nainstaluj mi skilly z https://github.com/fapi-cz/meta-ads-course-skills. Použij cesty skills/meta-ads-setup, skills/meta-ads-test a skills/meta-ads-utm. Pokud už mám starší kurzový skill z tohoto repozitáře, stáhni aktuální verzi do dočasné složky a aktualizuj tuhle instalovanou kopii. Zachovej moje připojení k Metě.
 
 3. V novém místním chatu napište **Nastav mi Meta Ads podle kurzu FAPI.** Codex vás provede vytvořením přístupu v Metě, nabídne místní formulář pro token a ověří spojení.
 
@@ -18,6 +28,8 @@
 1. Otevřete **Customize → Plugins → Add → Add marketplace → Add from a repository** a vložte adresu [repozitáře](https://github.com/fapi-cz/meta-ads-course-skills).
 2. Nainstalujte **fapi-meta-ads-course**. Otevřete kartu **Code** a spusťte místní relaci.
 3. Napište **Nastav mi Meta Ads podle kurzu FAPI.**
+
+Pokud už máte plugin nainstalovaný, obnovte jeho zdroj **fapi-kurzy** a aktualizujte plugin v **Customize → Plugins**.
 
 [Přidání zdroje pluginů v Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude) · [Místní relace Claude Code](https://code.claude.com/docs/en/desktop)
 

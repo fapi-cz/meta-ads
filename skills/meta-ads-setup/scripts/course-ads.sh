@@ -43,7 +43,7 @@ case "${1:-}" in
     install)
         install_runtime
         ;;
-    connect|cli|mcp)
+    connect|cli|cli-json|mcp)
         if [[ ! -x "$environment/bin/python" ]]; then
             printf '%s\n' 'Nejdříve spusťte s agentem nastavení Meta Ads podle kurzu FAPI.' >&2
             exit 1
@@ -51,7 +51,7 @@ case "${1:-}" in
         exec "$environment/bin/python" "$script_dir/runtime.py" "$@"
         ;;
     *)
-        printf '%s\n' 'Použití pro agenta: course-ads.sh install|connect|cli|mcp' >&2
+        printf '%s\n' 'Použití pro agenta: course-ads.sh install|connect|cli|cli-json|mcp' >&2
         exit 2
         ;;
 esac

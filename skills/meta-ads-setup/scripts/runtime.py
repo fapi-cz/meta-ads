@@ -156,7 +156,8 @@ def run_tool(channel, arguments):
         program = STATE_DIR / "venv" / "bin" / "meta"
         environment["ACCESS_TOKEN"] = credentials["cli"]
         environment["AD_ACCOUNT_ID"] = credentials["account"]
-        command = [str(program), "ads", *arguments]
+        options = ["--output", "json", "--no-input"] if channel == "cli-json" else []
+        command = [str(program), *options, "ads", *arguments]
 
     os.execve(program, command, environment)
 

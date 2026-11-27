@@ -8,7 +8,7 @@
     {
       "name": "fapi-meta-ads-course",
       "source": "./",
-      "description": "Připojení reklamního účtu Meta pro účastníky kurzu FAPI."
+      "description": "Připojení Meta Ads, testovací reklamy a povinné UTM pro kurz FAPI."
     }
   ]
 }
