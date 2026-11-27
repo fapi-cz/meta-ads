@@ -55,12 +55,12 @@ def check_url(url, tags, ref_code):
         raise ValueError("Uložená URL nebo url_tags neodpovídají povinné UTM šabloně.")
 
 
-def creative_links(value):
+def creative_links(value, allow_forms=False):
     if isinstance(value, list):
         for item in value:
-            yield from creative_links(item)
+            yield from creative_links(item, allow_forms)
     elif isinstance(value, dict):
-        if value.get("lead_gen_form_id") or value.get("leadgen_form_id"):
+        if not allow_forms and (value.get("lead_gen_form_id") or value.get("leadgen_form_id")):
             raise ValueError("Okamžitý formulář vyžaduje samostatné ověření závěrečného odkazu.")
         if value.get("url_tags"):
             raise ValueError("Kreativa má další parametry na jednotlivých odkazech. Použijte společné url_tags.")
@@ -68,10 +68,10 @@ def creative_links(value):
             if key in {"link", "website_url"} and isinstance(item, str) and item.startswith(("https://", "http://")):
                 yield item
             elif isinstance(item, (list, dict)):
-                yield from creative_links(item)
+                yield from creative_links(item, allow_forms)
 
 
-def check_ad(ad, ref_code, cli_read):
+def read_ad_creative(ad, cli_read):
     creative_ref = ad.get("creative")
     creative_id = creative_ref.get("id") if isinstance(creative_ref, dict) else creative_ref
     if not creative_id or not str(creative_id).isdigit():
@@ -82,12 +82,19 @@ def check_ad(ad, ref_code, cli_read):
     )
     if str(creative.get("id")) != str(creative_id):
         raise ValueError("Meta vrátila jiné ID kreativy než to připojené k reklamě.")
+    return creative
+
+
+def check_ad(ad, ref_code, cli_read, expected_url=None):
+    creative = read_ad_creative(ad, cli_read)
     links = set(creative_links([creative.get("object_story_spec"), creative.get("asset_feed_spec")]))
     if not links:
         raise ValueError("Meta nevrátila ověřitelnou webovou adresu uložené kreativy.")
+    if expected_url is not None and links != {expected_url}:
+        raise ValueError("Uložený webový odkaz neodpovídá nové potvrzené adrese.")
     for link in sorted(links):
         check_url(link, creative.get("url_tags") or "", ref_code)
-    return {"verified": True, "creative_id": str(creative_id), "links": len(links)}
+    return {"verified": True, "creative_id": str(creative["id"]), "links": len(links)}
 
 
 def main():

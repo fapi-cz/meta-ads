@@ -59,6 +59,13 @@ def check_time(value, expected, label):
         raise ValueError(f"{label} u uložené sady se liší od zadání.")
 
 
+def check_budget(campaign, adset, budget_type, budget_minor):
+    for field in ("daily_budget", "lifetime_budget"):
+        expected = budget_minor if field == f"{budget_type}_budget" else 0
+        if int(campaign.get(field) or 0) != expected or int(adset.get(field) or 0) != 0:
+            raise ValueError("Uložená výše, typ nebo úroveň rozpočtu neodpovídá zadání.")
+
+
 def check(args):
     if args.budget_minor <= 0 or not args.campaign_id.isdigit():
         raise ValueError("Zadejte číselné ID kampaně a kladný rozpočet v menších jednotkách.")
@@ -84,11 +91,7 @@ def check(args):
         if entity.get("status") != args.status:
             raise ValueError(f"Objekt {entity['id']} nemá uložený stav {args.status}.")
 
-    budgets = ("daily_budget", "lifetime_budget")
-    for field in budgets:
-        expected = args.budget_minor if field == f"{args.type}_budget" else 0
-        if int(campaign.get(field) or 0) != expected or int(adset.get(field) or 0) != 0:
-            raise ValueError("Uložená výše, typ nebo úroveň rozpočtu neodpovídá zadání.")
+    check_budget(campaign, adset, args.type, args.budget_minor)
     check_time(adset.get("start_time"), args.start_time, "Začátek")
     check_time(adset.get("end_time"), args.end_time, "Konec")
     if args.countries:

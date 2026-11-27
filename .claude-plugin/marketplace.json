@@ -8,7 +8,7 @@
     {
       "name": "fapi-meta-ads",
       "source": "./",
-      "description": "Připojení Meta Ads, testovací reklamy, kontrola UTM a vyhodnocení kampaní."
+      "description": "Připojení Meta Ads, reklamy na webináře, testy, kontrola UTM a vyhodnocení kampaní."
     }
   ]
 }

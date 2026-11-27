@@ -1,6 +1,6 @@
 # Knihovna Meta Ads pro Codex a Claude Code
 
-Knihovna propojí reklamní účet s oficiálním Meta Ads CLI a s Ads MCP tam, kde ho Meta pro účet zpřístupnila. Přidává skilly pro testovací reklamy, správu UTM a vyhodnocení kampaní. Použijte místní Codex nebo Claude Code na macOS, Linuxu nebo Windows. Ve Windows spouští klient instalaci, připojení a kontroly přes WSL. [Postup pro každý systém](skills/meta-ads-setup/references/platforms.md)
+Knihovna propojí reklamní účet s oficiálním Meta Ads CLI a s Ads MCP tam, kde ho Meta pro účet zpřístupnila. Přidává skilly pro reklamy na webináře, testovací reklamy, správu UTM a vyhodnocení kampaní. Použijte místní Codex nebo Claude Code na macOS, Linuxu nebo Windows. Ve Windows spouští klient instalaci, připojení a kontroly přes WSL. [Postup pro každý systém](skills/meta-ads-setup/references/platforms.md)
 
 ## Start ze staženého repozitáře
 
@@ -8,13 +8,14 @@ Knihovna propojí reklamní účet s oficiálním Meta Ads CLI a s Ads MCP tam, 
 2. V Codexu nebo Claude Code otevřete rozbalenou složku jako místní projekt. Pokud se aplikace zeptá na důvěru k projektu, potvrďte ji podle názvu a umístění složky.
 3. Napište **Pomoz mi vytvořit propojení s Meta Ads.** Agent připraví místní připojení a pošle zbývající kroky v Metě s přímými odkazy. Celé nastavení můžete projít na jeden zátah i podle návodu. [Odkazy a postup v Metě](skills/meta-ads-setup/references/meta-browser.md) · [Ruční propojení v Terminálu](skills/meta-ads-setup/references/platforms.md#připojení-v-terminálu)
 
-Pro používání ve všech místních projektech lze zkopírovat všechny čtyři složky ze `skills/` do `~/.agents/skills/` v Codexu nebo `~/.claude/skills/` v Claude Code. Spusťte novou místní konverzaci a použijte stejnou větu. Podporovaný je i import přímo z GitHubu podle kroků níže. [Složky Codex skillů](https://learn.chatgpt.com/docs/build-skills) · [Složky Claude Code skillů](https://code.claude.com/docs/en/skills)
+Pro používání ve všech místních projektech lze zkopírovat složky ze `skills/` do `~/.agents/skills/` v Codexu nebo `~/.claude/skills/` v Claude Code. Spusťte novou místní konverzaci a použijte stejnou větu. Podporovaný je i import přímo z GitHubu podle kroků níže. [Složky Codex skillů](https://learn.chatgpt.com/docs/build-skills) · [Složky Claude Code skillů](https://code.claude.com/docs/en/skills)
 
 ## Co skilly umí
 
 | Skill | Co napsat agentovi |
 | --- | --- |
 | [Připojení Meta Ads](skills/meta-ads-setup/SKILL.md) | **Pomoz mi vytvořit propojení s Meta Ads.** |
+| [Reklama na webinář](skills/meta-ads-webinar/SKILL.md) | **Založ mi pozastavenou reklamu na další webinář podle kampaně s ID … Použij přiložené bannery, video a okamžitý formulář. Rozpočet je celkem 3 500 Kč na 14 dní.** |
 | [Testovací reklama](skills/meta-ads-test/SKILL.md) | **Založ mi pozastavený test. Použij přiložené podklady, odkaz a text. Rozpočet je 200 Kč denně.** |
 | [Kontrola a oprava UTM](skills/meta-ads-utm/SKILL.md) | **Zkontroluj, jestli má reklama s ID … správně nastavené UTM.** Pro potvrzenou opravu napište **Oprav UTM u této reklamy.** |
 | [Vyhodnocení kampaní](skills/meta-ads-evaluate/SKILL.md) | **Vyhodnoť tyto testy za posledních 7 celých dní. Porovnej útratu, počet leadů a cenu za lead.** |
@@ -26,7 +27,7 @@ Každý test má **jednu kampaň, jednu sadu a jednu reklamu**. Výchozí rozpo�
 1. Otevřete Codex v desktopové aplikaci a zvolte místní práci na vašem počítači.
 2. Do chatu vložte tento text.
 
-   > $skill-installer Nainstaluj mi skilly z https://github.com/fapi-cz/meta-ads. Použij cesty skills/meta-ads-setup, skills/meta-ads-test, skills/meta-ads-utm a skills/meta-ads-evaluate. Pokud už tyto skilly mám, stáhni aktuální verzi do dočasné složky a aktualizuj instalované kopie. Zachovej moje připojení k Metě.
+   > $skill-installer Nainstaluj mi skilly z https://github.com/fapi-cz/meta-ads. Použij cesty skills/meta-ads-setup, skills/meta-ads-webinar, skills/meta-ads-test, skills/meta-ads-utm a skills/meta-ads-evaluate. Pokud už tyto skilly mám, stáhni aktuální verzi do dočasné složky a aktualizuj instalované kopie. Zachovej moje připojení k Metě.
 
 3. V novém místním chatu napište **Pomoz mi vytvořit propojení s Meta Ads.**
 
@@ -37,6 +38,8 @@ Každý test má **jednu kampaň, jednu sadu a jednu reklamu**. Výchozí rozpo�
 1. Otevřete **Customize → Plugins → Add → Add marketplace → Add from a repository** a vložte adresu repozitáře. [fapi-cz/meta-ads](https://github.com/fapi-cz/meta-ads)
 2. Ze zdroje **fapi-ads** nainstalujte **fapi-meta-ads**. Otevřete kartu **Code** a spusťte místní relaci.
 3. Napište **Pomoz mi vytvořit propojení s Meta Ads.**
+
+U již nainstalovaného pluginu obnovte zdroj **fapi-ads**, aktualizujte **Meta Ads** a otevřete novou místní relaci.
 
 [Přidání zdroje pluginů v Claude](https://support.claude.com/en/articles/13837440-use-plugins-in-claude) · [Místní relace Claude Code](https://code.claude.com/docs/en/desktop)
 

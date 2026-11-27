@@ -18,4 +18,4 @@ Pracuj v místní relaci a otevři [postup pro daný systém](references/platfor
 
 - Pokud uživatel používá vlastní spojení přes OAuth, ověř MCP nástrojem `ads_get_ad_accounts` přímo v klientovi. Při výměně otevři odpovídající výzvu `connect-mcp` nebo `connect-cli` a ověř nový přístup. ID uloženého účtu lze potvrdit Enterem. Pokud klient používá původní token, obnov jeho relaci.
 - Pro práci s reklamami používej Meta Ads MCP nebo oficiální CLI přes `cli-json`. ID vybraného účtu převezmi ze `status`. Při zápisu s nejasným výsledkem ověř uložený stav před dalším pokusem.
-- Pro reklamy použij [meta-ads-test](../meta-ads-test/SKILL.md), pro UTM [meta-ads-utm](../meta-ads-utm/SKILL.md) a pro výkonnost [meta-ads-evaluate](../meta-ads-evaluate/SKILL.md).
+- Pro webináře použij [meta-ads-webinar](../meta-ads-webinar/SKILL.md), pro testy [meta-ads-test](../meta-ads-test/SKILL.md), pro UTM [meta-ads-utm](../meta-ads-utm/SKILL.md) a pro výkonnost [meta-ads-evaluate](../meta-ads-evaluate/SKILL.md).
